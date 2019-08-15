@@ -1,0 +1,8 @@
+.oscillatorPicker {
+  color: #ccc;
+  flex-direction: row;
+}
+
+.radioButton {
+  color: #fff;
+}

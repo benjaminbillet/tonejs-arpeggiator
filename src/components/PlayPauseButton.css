@@ -1,0 +1,19 @@
+.playPauseButton {
+  width: 100%;
+}
+
+.playPauseButtonPlaying {
+  background-color: #1392D3;
+  color: #fff;
+}
+.playPauseButtonPlaying:hover {
+  background-color: #115097;
+}
+
+.playPauseButtonPaused {
+  background-color: #b4006f;
+  color: #fff;
+}
+.playPauseButtonPaused:hover {
+  background-color: #6d0043;
+}

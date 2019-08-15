@@ -1,0 +1,38 @@
+{
+  "name": "tonejs-experiments",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "execute": "babel-node",
+    "transpile": "babel . --ignore ./node_modules,./generated --out-dir ./generated",
+    "dev": "parcel --global App"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.4.3",
+    "@babel/core": "7.4.3",
+    "@babel/node": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/plugin-transform-runtime": "7.5.5",
+    "@babel/preset-env": "7.4.3",
+    "@babel/preset-react": "7.0.0",
+    "babel-eslint": "10.0.2",
+    "babel-preset-mobx": "2.0.0",
+    "eslint": "5.16.0",
+    "eslint-config-airbnb": "17.1.1",
+    "eslint-plugin-babel": "5.3.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.14.3",
+    "parcel-bundler": "1.12.3",
+    "postcss-modules": "1.4.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "4.3.0",
+    "mobx": "5.13.0",
+    "mobx-react": "6.1.1",
+    "prop-types": "15.7.2",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "tone": "13.4.9"
+  }
+}
