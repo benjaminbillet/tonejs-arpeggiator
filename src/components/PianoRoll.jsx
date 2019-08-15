@@ -17,11 +17,9 @@ class PianoRoll extends Component {
 
   isLighted = (octave, note) => {
     const { lighted } = this.props;
-    for (let i = 0; i < lighted.length; i++) {
-      if (`${note}${octave}` === lighted[i]) {
-        if (lighted[i].startsWith(note)) {
-          return true;
-        }
+    for (let i = 0; i < lighted.length; i += 1) {
+      if (`${note}${octave}` === lighted[i] && lighted[i].startsWith(note)) {
+        return true;
       }
     }
     return false;

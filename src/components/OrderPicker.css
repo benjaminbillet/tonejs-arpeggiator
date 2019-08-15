@@ -1,0 +1,19 @@
+.slider {
+  color: #40bfff;
+  height: 100px !important;
+}
+
+.markLabelActive, .markLabel  {
+  color: #c7c7c7;
+}
+
+.hiddenThumb {
+  display: none;
+}
+
+.label {
+  color: #eee;
+  font-variant: small-caps;
+  width: 100%;
+  text-align: center;
+}

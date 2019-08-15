@@ -4,26 +4,11 @@ import FormControl from '@material-ui/core/FormControl';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import { observer } from 'mobx-react';
 
-import styles from './GenericPicker.css';
-import Arpeggiator, { SCALES } from './Arpeggiator';
-
-const scaleChordToLabel = (scaleChord, triadType) => {
-  const s = scaleChord;
-  switch (triadType) {
-    case 'maj':
-      return s.toUpperCase();
-    case 'min':
-      return s;
-    case 'aug':
-      return `${s.toUpperCase()}+`;
-    case 'dim':
-      return `${s}°`;
-    default:
-      throw new Error('unknow triadType');
-  }
-};
+import styles from './ScalePicker.css';
+import Arpeggiator from './Arpeggiator';
 
 @observer
 class ScalePicker extends PureComponent {
@@ -33,32 +18,30 @@ class ScalePicker extends PureComponent {
 
   handleChange = (event) => {
     const { arpeggiator } = this.props;
-    arpeggiator.setScaleChord(event.target.value);
+    arpeggiator.setScaleChord(parseInt(event.target.value, 10));
   }
 
   renderOptions = (arpeggiator) => {
-    const scale = SCALES[arpeggiator.mode];
-    return Object.keys(scale.triads).map((scaleChord) => {
-      const chordType = scale.triads[scaleChord];
-      return (
-        <FormControlLabel
-          value={scaleChord}
-          key={scaleChord}
-          control={<Radio classes={{ root: styles.radioButton }} />}
-          label={scaleChordToLabel(scaleChord, chordType)}
-        />
-      );
-    });
+    const { currentScale } = arpeggiator;
+    return currentScale.map((chordType, index) => (
+      <FormControlLabel
+        value={`${index}`}
+        key={chordType}
+        control={<Radio classes={{ root: styles.radioButton }} />}
+        label={chordType}
+      />
+    ));
   }
 
   render() {
     const { arpeggiator } = this.props;
     return (
-      <FormControl>
+      <FormControl className={styles.container}>
+        <FormLabel component="legend" className={styles.label}>Scale</FormLabel>
         <RadioGroup
           onChange={this.handleChange}
-          value={arpeggiator.scaleChord}
-          className={styles.oscillatorPicker}
+          value={`${arpeggiator.scaleChord}`}
+          className={styles.picker}
         >
           {this.renderOptions(arpeggiator)}
         </RadioGroup>

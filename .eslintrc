@@ -1,4 +1,10 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb"
+  "extends": "airbnb",
+  "rules": {
+    "object-curly-newline": ["error", {
+      "ObjectPattern": { "multiline": true },
+    }],
+    "react/no-array-index-key": "warn"
+  }
 }

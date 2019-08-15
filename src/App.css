@@ -12,7 +12,7 @@ body {
 
 .container {
   width: 750px;
-  height: 400px;
+  height: 650px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -29,8 +29,70 @@ body {
   align-items: center;
 }
 
+.controlPanel {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.modePicker {
+  flex-direction: column;
+  flex-shrink: 1;
+}
+
+.rootPicker {
+  flex-direction: column;
+  flex-shrink: 1;
+}
+
+.controls {
+  flex-grow: 1;
+  padding-left: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bpmLoopControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  padding: 10px 0;
+}
+
 .slider {
   color: #40bfff;
+}
+
+.bpmLabel {
+  color: #eee;
+}
+.bpmPicker {
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 50%;
+  margin: 0 60px 0 30px;
+}
+
+.loopPicker {
+  flex-grow: 1;
+  flex-basis: 50%;
+}
+
+.orderPicker, .progressionPicker {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-flow: row wrap;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.progressionControls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -47,12 +109,12 @@ body {
 
 @keyframes Gradient {
   0% {
-  background-position: 0% 50%
+    background-position: 0% 50%
   }
-50% {
-background-position: 100% 50%
-}
-100% {
-background-position: 0% 50%
-}
+  50% {
+    background-position: 100% 50%
+  }
+  100% {
+    background-position: 0% 50%
+  }
 }

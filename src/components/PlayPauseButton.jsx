@@ -7,7 +7,10 @@ import styles from './PlayPauseButton.css';
 
 export default class PlayPauseButton extends PureComponent {
   static propTypes = {
-    source: PropTypes.object.isRequired,
+    source: PropTypes.shape({
+      start: PropTypes.func,
+      stop: PropTypes.func,
+    }).isRequired,
   };
 
   constructor(props) {
