@@ -1,0 +1,32 @@
+:root {
+  --font-stack: 'Helvetica Neue', Helvetica, sans-serif;
+
+  --background-color-lighter: #666;
+  --background-color: #333;
+  --background-color-darker: #111;
+
+  --darker-text-color: #aaa;
+  --neutral-text-color: #ccc;
+
+  --primary-color: #1392d3;
+  --primary-color-darker: #115097;
+  --primary-text-color: #fff;
+
+  --secondary-color: #b4006f;
+  --secondary-color-darker: #6d0043;
+  --secondary-text-color: #fff;
+}
+
+body {
+  background: linear-gradient(180deg, var(--background-color) 50%, var(--primary-color) 50%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-stack);
+  color: var(--neutral-text-color);
+  overflow: hidden;
+}

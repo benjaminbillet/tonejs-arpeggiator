@@ -1,0 +1,21 @@
+module.exports = {
+  singleQuote: true,
+  trailingComma: 'all',
+  bracketSpacing: true,
+  tabWidth: 2,
+  printWidth: 100,
+  arrowParens: 'avoid',
+  endOfLine: 'lf',
+  plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-packagejson'],
+  importOrder: [
+    '<TYPES>',
+    'react',
+    '<BUILTIN_MODULES>',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '<TYPES>^[../]',
+    '<TYPES>^[./]',
+    '^[../]',
+    '^[./]',
+  ],
+};
