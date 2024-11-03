@@ -1,0 +1,43 @@
+.legend {
+  width: 30px;
+  display: flex;
+}
+
+.legend .track {
+  position: relative;
+  width: 2px;
+  color: var(--neutral-text-color);
+  border-left: 2px solid var(--background-color-lighter);
+  left: 25%;
+  box-sizing: border-box;
+}
+
+.legend .marks {
+  font-size: 0.75rem;
+  color: var(--neutral-text-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  top: -5px;
+  height: 110px;
+  transform: translateX(15px);
+}
+
+.legend .marks div:before {
+  content: '';
+  position: relative;
+  width: 2px;
+  height: 2px;
+  background-color: var(--neutral-text-color);
+  display: block;
+}
+
+.topMark:before {
+  transform: translate(-10px, 5px);
+}
+
+.bottomMark:before {
+  transform: translate(-10px, 10px);
+}

@@ -1,0 +1,11 @@
+.legend {
+  text-align: center;
+}
+
+.sliders {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  height: 100px;
+  gap: 1rem;
+}

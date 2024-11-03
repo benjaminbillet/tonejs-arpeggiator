@@ -1,0 +1,31 @@
+.pianoroll {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+.key,
+.sharpKey {
+  background-color: #fff;
+  flex-grow: 4;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-bottom: none;
+}
+
+.sharpKey {
+  background-color: #000;
+  flex-grow: 3;
+  border-left: none;
+  border-right: none;
+}
+
+.key.selectedKey {
+  background-color: var(--secondary-color-lighter);
+}
+
+.sharpKey.selectedKey {
+  background-color: var(--secondary-color);
+}

@@ -10,10 +10,13 @@
 
   --primary-color: #1392d3;
   --primary-color-darker: #115097;
+  --primary-color-lighter: #14b6ff;
+
   --primary-text-color: #fff;
 
   --secondary-color: #b4006f;
   --secondary-color-darker: #6d0043;
+  --secondary-color-lighter: #ff66c4;
   --secondary-text-color: #fff;
 }
 

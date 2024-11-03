@@ -1,0 +1,32 @@
+.playPauseButton {
+  width: 100%;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.25s ease;
+}
+
+.playPauseButtonPlaying {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+}
+.playPauseButtonPlaying:hover {
+  background-color: var(--primary-color-darker);
+}
+.playPauseButtonPlaying:after {
+  content: ' ⏵';
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+
+.playPauseButtonPaused {
+  background-color: var(--secondary-color);
+  color: var(--secondary-text-color);
+}
+.playPauseButtonPaused:hover {
+  background-color: var(--secondary-color-darker);
+}
+.playPauseButtonPaused:after {
+  content: ' ⏸';
+  font-size: 1.5em;
+  vertical-align: middle;
+}
