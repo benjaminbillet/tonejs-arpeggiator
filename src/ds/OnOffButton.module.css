@@ -1,0 +1,7 @@
+.button {
+  background: var(--secondary-color-darker) !important;
+}
+
+.button[class~='ant-switch-checked'] {
+  background: var(--secondary-color) !important;
+}

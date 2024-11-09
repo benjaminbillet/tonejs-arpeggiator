@@ -49,7 +49,11 @@ const createTransport = () => {
     if (progressionEnabled) {
       const progressionSequence = store.get(state.progressionSequence);
       currentProgression = (currentProgression + 1) % progressionSequence.length;
-      arpeggiator.setScaleChord(progressionSequence[currentProgression]);
+
+      const scaleChord = progressionSequence[currentProgression];
+      arpeggiator.setScaleChord(scaleChord);
+
+      store.set(state.scaleChord, scaleChord);
       store.set(state.currentProgression, currentProgression);
     }
   };

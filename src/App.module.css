@@ -18,8 +18,12 @@
   row-gap: 1rem;
 }
 
-.sidePanel {
+.leftPanel {
   width: 450px;
+}
+
+.rightPanel {
+  gap: 40px;
 }
 
 .wavyBackground {
@@ -42,36 +46,4 @@
   100% {
     background-position: 0% 50%;
   }
-}
-
-.bpmLine {
-  justify-content: space-between;
-}
-
-.bpm {
-  transform: translateX(10px);
-  width: 200px;
-  gap: 0.5rem !important;
-}
-
-.bpmLegend {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.bpmLegend div {
-  font-size: 0.75rem;
-  color: var(--neutral-text-color);
-}
-
-.bpmLeftMark {
-  position: relative;
-  left: -10px;
-}
-
-.bpmRightMark {
-  position: relative;
-  right: -10px;
 }

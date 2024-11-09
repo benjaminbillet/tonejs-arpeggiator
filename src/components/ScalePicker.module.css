@@ -1,0 +1,11 @@
+.legend {
+  margin-right: 20px;
+}
+
+.radioContainer {
+  gap: 0;
+}
+
+.radioLabel {
+  width: 65px;
+}

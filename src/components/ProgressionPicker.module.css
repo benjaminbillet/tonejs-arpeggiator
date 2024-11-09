@@ -7,5 +7,8 @@
   justify-content: center;
   padding: 10px 0;
   height: 100px;
-  gap: 1rem;
+}
+
+.activeSlider:after {
+  background-color: var(--primary-color-darker) !important;
 }

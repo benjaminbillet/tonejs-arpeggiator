@@ -4,8 +4,8 @@ import { useAtom } from 'jotai';
 import * as arpeggiatorActions from '../domains/arpeggiator/arpeggiator.service';
 import * as arpeggiatorState from '../domains/arpeggiator/arpeggiator.state';
 import { Legend } from '../ds/Legend';
+import { Slider } from '../ds/Slider';
 import { SliderLegend } from '../ds/SliderLegend';
-import { VerticalSlider } from '../ds/VerticalSlider';
 import styles from './OrderPicker.module.css';
 
 export function OrderPicker() {
@@ -13,11 +13,12 @@ export function OrderPicker() {
   const arpeggio = arpeggiatorActions.getArpeggio();
 
   const sliders = sequence.map((seqValue, index) => (
-    <VerticalSlider
+    <Slider
       key={index}
       min={0}
       max={5}
       step={1}
+      orientation="vertical"
       formatValue={value => arpeggio[value]}
       value={seqValue}
       onChange={value => arpeggiatorActions.updateNoteOrder(index, value)}
@@ -33,5 +34,3 @@ export function OrderPicker() {
     </div>
   );
 }
-
-export default OrderPicker;

@@ -1,7 +1,6 @@
 .pianoroll {
   display: flex;
   width: 100%;
-  height: 50px;
   align-items: stretch;
   justify-items: stretch;
 }
@@ -13,6 +12,7 @@
   border: 1px solid #ccc;
   border-top: none;
   border-bottom: none;
+  border-radius: 2px;
 }
 
 .sharpKey {
@@ -24,8 +24,10 @@
 
 .key.selectedKey {
   background-color: var(--secondary-color-lighter);
+  border-color: var(--secondary-color-lighter);
 }
 
 .sharpKey.selectedKey {
   background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
 }

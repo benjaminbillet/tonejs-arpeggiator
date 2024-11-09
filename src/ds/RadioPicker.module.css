@@ -15,10 +15,10 @@
   appearance: none;
   margin: 0;
 
-  color: var(--neutral-text-color);
+  color: var(--text-color);
   width: 1.5rem;
   height: 1.5rem;
-  border: 0.15rem solid var(--neutral-text-color);
+  border: 0.15rem solid var(--text-color);
   border-radius: 50%;
 }
 
