@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 
-import * as arpeggiatorActions from '../domains/arpeggiator/arpeggiator.service';
+import { arpeggiatorService } from '../domains/arpeggiator/arpeggiator.service';
 import * as arpeggiatorState from '../domains/arpeggiator/arpeggiator.state';
 import { Legend } from '../ds/Legend';
 import { Slider } from '../ds/Slider';
@@ -10,7 +10,7 @@ import styles from './OrderPicker.module.css';
 
 export function OrderPicker() {
   const [sequence] = useAtom(arpeggiatorState.sequence);
-  const arpeggio = arpeggiatorActions.getArpeggio();
+  const arpeggio = arpeggiatorService.getArpeggio();
 
   const sliders = sequence.map((seqValue, index) => (
     <Slider
@@ -21,7 +21,7 @@ export function OrderPicker() {
       orientation="vertical"
       formatValue={value => arpeggio[value]}
       value={seqValue}
-      onChange={value => arpeggiatorActions.updateNoteOrder(index, value)}
+      onChange={value => arpeggiatorService.updateNoteOrder(index, value)}
     />
   ));
   return (

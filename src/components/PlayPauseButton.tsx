@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import * as arpeggiatorService from '../domains/arpeggiator/arpeggiator.service';
+import { arpeggiatorService } from '../domains/arpeggiator/arpeggiator.service';
 import { Button } from '../ds/Button';
 import styles from './PlayPauseButton.module.css';
 

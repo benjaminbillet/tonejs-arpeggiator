@@ -2,9 +2,9 @@ import React from 'react';
 import { useAtom } from 'jotai';
 
 import { SCALES_DATA } from '../domains/arpeggiator/arpeggiator.constant';
-import * as arpeggiatorActions from '../domains/arpeggiator/arpeggiator.service';
-import { scaleChordToLabel } from '../domains/arpeggiator/arpeggiator.service';
+import { arpeggiatorService } from '../domains/arpeggiator/arpeggiator.service';
 import * as arpeggiatorState from '../domains/arpeggiator/arpeggiator.state';
+import { getLabelForScaleChord } from '../domains/arpeggiator/helpers/getLabelForScaleChord';
 import { Legend } from '../ds/Legend';
 import { RadioPicker } from '../ds/RadioPicker';
 import styles from './ScalePicker.module.css';
@@ -14,7 +14,7 @@ export function ScalePicker() {
   const [mode] = useAtom(arpeggiatorState.mode);
 
   const scaleOptions = SCALES_DATA[mode].triads.map((key, index) => ({
-    label: scaleChordToLabel(index, key),
+    label: getLabelForScaleChord(index, key),
     value: `${index}`,
   }));
 
@@ -24,7 +24,7 @@ export function ScalePicker() {
       orientation="horizontal"
       options={scaleOptions}
       value={`${scaleChord}`}
-      onChange={s => arpeggiatorActions.setScaleChord(parseInt(s))}
+      onChange={s => arpeggiatorService.setScaleChord(parseInt(s))}
       name="scale"
       labelClassName={styles.radioLabel}
       containerClassName={styles.radioContainer}

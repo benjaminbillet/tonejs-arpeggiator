@@ -2,7 +2,7 @@ import React from 'react';
 import { useAtom } from 'jotai';
 
 import { SCALES_DATA } from '../domains/arpeggiator/arpeggiator.constant';
-import * as arpeggiatorActions from '../domains/arpeggiator/arpeggiator.service';
+import { arpeggiatorService } from '../domains/arpeggiator/arpeggiator.service';
 import * as arpeggiatorState from '../domains/arpeggiator/arpeggiator.state';
 import { Scales } from '../domains/arpeggiator/arpeggiator.type';
 import { Legend } from '../ds/Legend';
@@ -22,7 +22,7 @@ export function ModePicker() {
       orientation="vertical"
       options={scalesOptions}
       value={mode}
-      onChange={m => arpeggiatorActions.setMode(m as Scales)}
+      onChange={m => arpeggiatorService.setMode(m as Scales)}
       name="mode"
     />
   );

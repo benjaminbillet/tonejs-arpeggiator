@@ -3,3 +3,5 @@ output/
 dist/
 .parcel-cache/
 .DS_Store
+.vscode
+.idea

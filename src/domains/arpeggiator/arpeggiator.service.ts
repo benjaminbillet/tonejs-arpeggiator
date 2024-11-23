@@ -1,187 +1,174 @@
 import { getDefaultStore } from 'jotai';
 import * as Tone from 'tone';
 
-import { SCALE_CHORDS, SCALES_DATA } from './arpeggiator.constant';
+import { SCALES_DATA } from './arpeggiator.constant';
 import * as state from './arpeggiator.state';
-import { ChordIntervals, Keys, Scales } from './arpeggiator.type';
-import { ArpeggioBuilder } from './ArpeggioBuilder';
+import { Keys, Scales } from './arpeggiator.type';
+import { ArpeggioBuilder } from './helpers/arpeggioBuilder';
+import { getLabelForScaleChord } from './helpers/getLabelForScaleChord';
 
-const store = getDefaultStore();
+class ArpeggiatorService {
+  private readonly store: ReturnType<typeof getDefaultStore>;
+  private readonly synth: Tone.PolySynth;
+  private readonly transport: ReturnType<typeof Tone.getTransport>;
+  private readonly arpeggiator: ArpeggioBuilder;
 
-const createTransport = () => {
-  // output of the player
-  const masterChannel = new Tone.Gain(0.7);
-  masterChannel.toDestination();
+  private step = 0;
+  private loopSign = 1;
+  private currentProgression = 0;
 
-  // polyphonic AM synth
-  const synth = new Tone.PolySynth({
-    maxPolyphony: 16,
-    voice: Tone.Synth,
-    options: {
-      oscillator: {
-        type: 'triangle',
+  constructor() {
+    this.store = getDefaultStore();
+
+    this.transport = Tone.getTransport();
+    this.transport.bpm.value = this.store.get(state.bpm);
+
+    this.arpeggiator = new ArpeggioBuilder(
+      this.store.get(state.mode),
+      this.store.get(state.scaleChord),
+      this.store.get(state.fundamental),
+      6,
+      this.store.get(state.sequence),
+    );
+
+    // polyphonic synth
+    this.synth = new Tone.PolySynth({
+      maxPolyphony: 16,
+      voice: Tone.Synth,
+      options: {
+        oscillator: {
+          type: 'triangle',
+        },
       },
-    },
-  });
+    });
 
-  // fx for the synthesizer
-  const fx = {
-    distortion: new Tone.Distortion(0.8),
-    reverb: new Tone.Freeverb(0.1, 3000),
-    delay: new Tone.PingPongDelay('16n', 0.1),
-  };
-  fx.distortion.wet.value = 0.2;
-  fx.reverb.wet.value = 0.2;
-  fx.delay.wet.value = 0.3;
+    // output of the player
+    const masterChannel = new Tone.Gain(0.7);
+    masterChannel.toDestination();
 
-  // chaining the synth -> effects -> output channel
-  synth.chain(fx.delay, fx.reverb, masterChannel);
+    // fx for the synthesizer
+    const fx = {
+      distortion: new Tone.Distortion(0.8),
+      reverb: new Tone.Freeverb(0.1, 3000),
+      delay: new Tone.PingPongDelay('16n', 0.1),
+    };
+    fx.distortion.wet.value = 0.2;
+    fx.reverb.wet.value = 0.2;
+    fx.delay.wet.value = 0.3;
 
-  const transport = Tone.getTransport();
-  transport.bpm.value = store.get(state.bpm);
+    // chaining the synth -> effects -> output channel
+    this.synth.chain(fx.delay, fx.reverb, masterChannel);
 
-  let step = 0;
-  let loopSign = 1;
-  let currentProgression = 0;
+    this.transport.scheduleRepeat(time => this.onNextTick(time), '16n');
+  }
 
-  const incrementProgression = () => {
-    const progressionEnabled = store.get(state.progressionEnabled);
-    if (progressionEnabled) {
-      const progressionSequence = store.get(state.progressionSequence);
-      currentProgression = (currentProgression + 1) % progressionSequence.length;
+  play() {
+    this.transport.start();
+  }
 
-      const scaleChord = progressionSequence[currentProgression];
-      arpeggiator.setScaleChord(scaleChord);
+  pause() {
+    this.transport.stop();
+  }
 
-      store.set(state.scaleChord, scaleChord);
-      store.set(state.currentProgression, currentProgression);
+  setMode(mode: Scales) {
+    this.store.set(state.mode, mode);
+    this.arpeggiator.setMode(mode);
+  }
+
+  setFundamental(fundamental: Keys) {
+    this.store.set(state.fundamental, fundamental);
+    this.arpeggiator.setFundamental(fundamental);
+  }
+
+  setLoop(loop: boolean) {
+    this.store.set(state.loop, loop);
+  }
+
+  setBpm(bpm: number) {
+    this.store.set(state.bpm, bpm);
+    this.transport.bpm.value = bpm;
+  }
+
+  setScaleChord(scaleChord: number) {
+    this.store.set(state.scaleChord, scaleChord);
+    this.arpeggiator.setScaleChord(scaleChord);
+  }
+
+  updateNoteOrder(index: number, value: number) {
+    const sequence = [...this.arpeggiator.getSequence()];
+    sequence[index] = value;
+    this.store.set(state.sequence, sequence);
+    this.arpeggiator.changeOrder(index, value);
+  }
+
+  getArpeggio() {
+    return this.arpeggiator.getArpeggio();
+  }
+
+  getCurrentScale() {
+    const { triads } = SCALES_DATA[this.store.get(state.mode)];
+    return triads.map((chordType, index) => getLabelForScaleChord(index, chordType));
+  }
+
+  updateProgression(index: number, value: number) {
+    const progressionEnabled = this.store.get(state.progressionEnabled);
+    const currentProgression = this.store.get(state.currentProgression);
+
+    const sequence = [...this.store.get(state.progressionSequence)];
+    sequence[index] = value;
+    this.store.set(state.progressionSequence, sequence);
+
+    if (progressionEnabled && index === currentProgression) {
+      this.arpeggiator.setScaleChord(sequence[currentProgression]);
     }
-  };
+  }
 
-  const arpeggiator = new ArpeggioBuilder(
-    store.get(state.mode),
-    store.get(state.scaleChord),
-    store.get(state.fundamental),
-    6,
-    store.get(state.sequence),
-  );
+  setProgressionEnabled(progressionEnabled: boolean) {
+    this.store.set(state.progressionEnabled, progressionEnabled);
+  }
 
-  transport.scheduleRepeat(time => {
-    const arpeggio = arpeggiator.getArpeggio();
-    const sequence = arpeggiator.getSequence();
-    const size = arpeggiator.getSize();
-    const loop = store.get(state.loop);
+  private onNextTick(time: number) {
+    const arpeggio = this.arpeggiator.getArpeggio();
+    const sequence = this.arpeggiator.getSequence();
+    const size = this.arpeggiator.getSize();
+    const loop = this.store.get(state.loop);
 
-    let note = null;
-    if (sequence != null) {
-      note = arpeggio[sequence[step]];
-    } else {
-      note = arpeggio[step];
-    }
+    const note = sequence != null ? arpeggio[sequence[this.step]] : arpeggio[this.step];
 
-    synth.triggerAttackRelease(note, '16n', time);
-    store.set(state.activeNotes, [note]);
+    this.synth.triggerAttackRelease(note, '16n', time);
+    this.store.set(state.activeNotes, [note]);
 
     if (loop) {
-      step += loopSign;
-      if (step >= size) {
-        step = size - 2;
-        loopSign = -1;
-      } else if (step < 0) {
-        step = 1;
-        loopSign = 1;
-        incrementProgression();
+      this.step += this.loopSign;
+      if (this.step >= size) {
+        this.step = size - 2;
+        this.loopSign = -1;
+      } else if (this.step < 0) {
+        this.step = 1;
+        this.loopSign = 1;
+        this.incrementProgression();
       }
     } else {
-      step = (step + 1) % size;
-      if (step === 0) {
-        incrementProgression();
+      this.step = (this.step + 1) % size;
+      if (this.step === 0) {
+        this.incrementProgression();
       }
     }
-  }, '16n');
-
-  return { transport, arpeggiator };
-};
-
-const { transport, arpeggiator } = createTransport();
-
-export const play = () => {
-  transport.start();
-};
-
-export const pause = () => {
-  transport.stop();
-};
-
-export const setMode = (mode: Scales) => {
-  store.set(state.mode, mode);
-  arpeggiator.setMode(mode);
-};
-
-export const setFundamental = (fundamental: Keys) => {
-  store.set(state.fundamental, fundamental);
-  arpeggiator.setFundamental(fundamental);
-};
-
-export const setLoop = (loop: boolean) => {
-  store.set(state.loop, loop);
-};
-
-export const setBpm = (bpm: number) => {
-  store.set(state.bpm, bpm);
-  transport.bpm.value = bpm;
-};
-
-export const setScaleChord = (scaleChord: number) => {
-  store.set(state.scaleChord, scaleChord);
-  arpeggiator.setScaleChord(scaleChord);
-};
-
-export const updateNoteOrder = (index: number, value: number) => {
-  const sequence = [...arpeggiator.getSequence()];
-  sequence[index] = value;
-  store.set(state.sequence, sequence);
-  arpeggiator.changeOrder(index, value);
-};
-
-export const scaleChordToLabel = (scaleChordIdx: number, triadType: ChordIntervals) => {
-  const s = SCALE_CHORDS[scaleChordIdx];
-  switch (triadType) {
-    case 'maj':
-      return s.toUpperCase();
-    case 'min':
-      return s;
-    case 'aug':
-      return `${s.toUpperCase()}+`;
-    case 'dim':
-      return `${s}°`;
-    default:
-      throw new Error('unknow triadType');
   }
-};
 
-export const getArpeggio = () => {
-  return arpeggiator.getArpeggio();
-};
+  private incrementProgression() {
+    const progressionEnabled = this.store.get(state.progressionEnabled);
+    if (progressionEnabled) {
+      const progressionSequence = this.store.get(state.progressionSequence);
+      this.currentProgression = (this.currentProgression + 1) % progressionSequence.length;
 
-export const getCurrentScale = () => {
-  const { triads } = SCALES_DATA[store.get(state.mode)];
-  return triads.map((chordType, index) => scaleChordToLabel(index, chordType));
-};
+      const scaleChord = progressionSequence[this.currentProgression];
+      this.arpeggiator.setScaleChord(scaleChord);
 
-export const updateProgression = (index: number, value: number) => {
-  const progressionEnabled = store.get(state.progressionEnabled);
-  const currentProgression = store.get(state.currentProgression);
-
-  const sequence = [...store.get(state.progressionSequence)];
-  sequence[index] = value;
-  store.set(state.progressionSequence, sequence);
-
-  if (progressionEnabled && index === currentProgression) {
-    arpeggiator.setScaleChord(sequence[currentProgression]);
+      this.store.set(state.scaleChord, scaleChord);
+      this.store.set(state.currentProgression, this.currentProgression);
+    }
   }
-};
+}
 
-export const setProgressionEnabled = (progressionEnabled: boolean) => {
-  store.set(state.progressionEnabled, progressionEnabled);
-};
+export const arpeggiatorService = new ArpeggiatorService();

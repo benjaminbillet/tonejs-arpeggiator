@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 
-import * as arpeggiatorActions from '../domains/arpeggiator/arpeggiator.service';
+import { arpeggiatorService } from '../domains/arpeggiator/arpeggiator.service';
 import * as arpeggiatorState from '../domains/arpeggiator/arpeggiator.state';
 import { RadioPicker } from '../ds/RadioPicker';
 
@@ -17,7 +17,7 @@ export function LoopToggle() {
     <RadioPicker
       options={loopOptions}
       value={loop ? 'loop' : 'no-loop'}
-      onChange={s => arpeggiatorActions.setLoop(s === 'loop')}
+      onChange={s => arpeggiatorService.setLoop(s === 'loop')}
       name="loop"
     />
   );

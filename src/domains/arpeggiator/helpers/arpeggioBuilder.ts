@@ -1,5 +1,5 @@
-import { CHORD_INTERVALS, KEYS, SCALES, SCALES_DATA } from './arpeggiator.constant';
-import { Keys, Note, Scales } from './arpeggiator.type';
+import { CHORD_INTERVALS, KEYS, SCALES, SCALES_DATA } from '../arpeggiator.constant';
+import { Keys, Note, Scales } from '../arpeggiator.type';
 
 export class ArpeggioBuilder {
   private cache: Dict<Note[]> = {};
@@ -49,7 +49,7 @@ export class ArpeggioBuilder {
     return this.sequence;
   }
 
-  computeCache(baseOctave = 4) {
+  private computeCache(baseOctave = 4) {
     SCALES.forEach(mode => {
       SCALES_DATA[mode].triads.forEach((_, scaleChordIdx) => {
         KEYS.forEach(fundamental => {

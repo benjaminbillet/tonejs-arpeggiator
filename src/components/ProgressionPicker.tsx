@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 
-import * as arpeggiatorActions from '../domains/arpeggiator/arpeggiator.service';
+import { arpeggiatorService } from '../domains/arpeggiator/arpeggiator.service';
 import * as arpeggiatorState from '../domains/arpeggiator/arpeggiator.state';
 import { FlexCell } from '../ds/FlexCell';
 import { Legend } from '../ds/Legend';
@@ -15,10 +15,9 @@ export function ProgressionPicker() {
   const [progressionEnabled] = useAtom(arpeggiatorState.progressionEnabled);
   const [currentProgression] = useAtom(arpeggiatorState.currentProgression);
 
-  const currentScale = arpeggiatorActions.getCurrentScale();
+  const currentScale = arpeggiatorService.getCurrentScale();
 
   const sliders = progressionSequence.map((chordType, index) => {
-    console.log(progressionEnabled, index, currentProgression);
     return (
       <Slider
         key={index}
@@ -28,7 +27,7 @@ export function ProgressionPicker() {
         orientation="vertical"
         formatValue={x => currentScale[x]}
         value={chordType}
-        onChange={value => arpeggiatorActions.updateProgression(index, value)}
+        onChange={value => arpeggiatorService.updateProgression(index, value)}
         handleClassName={
           progressionEnabled && index === currentProgression ? styles.activeSlider : null
         }
@@ -42,7 +41,7 @@ export function ProgressionPicker() {
         <Legend className={styles.legend}>Progression</Legend>
         <OnOffButton
           value={progressionEnabled}
-          onChange={value => arpeggiatorActions.setProgressionEnabled(value)}
+          onChange={value => arpeggiatorService.setProgressionEnabled(value)}
         />
       </FlexCell>
       <div className={styles.sliders}>
